@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toko_online/pages/widgets/product_card.dart';
 import 'package:flutter_toko_online/theme.dart';
 
+import '../widgets/product_tile.dart';
+
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -206,12 +208,41 @@ class HomePage extends StatelessWidget {
       );
     }
 
+    Widget newArivalTitle() {
+      return Container(
+        margin: EdgeInsets.only(
+            top: defaultMargin, left: defaultMargin, right: defaultMargin),
+        child: Text(
+          'New Arrivals',
+          style: primaryTextStyle.copyWith(
+            fontSize: 22,
+            fontWeight: semiBold,
+          ),
+        ),
+      );
+    }
+
+    Widget newArrivals() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 14,
+        ),
+        child: Column(children: [
+          ProductTile(),
+          ProductTile(),
+          ProductTile(),
+        ]),
+      );
+    }
+
     return ListView(
       children: [
         header(),
         categories(),
         popularProdactTitle(),
-        popularProduct()
+        popularProduct(),
+        newArivalTitle(),
+        newArrivals(),
       ],
     );
   }
