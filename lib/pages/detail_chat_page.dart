@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/pages/widgets/chat_bubble.dart';
 import 'package:flutter_toko_online/theme.dart';
 
 class DetailChatPage extends StatelessWidget {
@@ -50,8 +51,8 @@ class DetailChatPage extends StatelessWidget {
       return Container(
         width: 225,
         height: 74,
-        margin: EdgeInsets.only(bottom: 20),
-        padding: EdgeInsets.all(10),
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
             color: backgroundColor5,
             borderRadius: BorderRadius.circular(12),
@@ -66,7 +67,7 @@ class DetailChatPage extends StatelessWidget {
                 width: 54,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             Expanded(
@@ -79,7 +80,7 @@ class DetailChatPage extends StatelessWidget {
                     style: primaryTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   Text(
@@ -97,6 +98,22 @@ class DetailChatPage extends StatelessWidget {
             )
           ],
         ),
+      );
+    }
+
+    Widget content() {
+      return ListView(
+        padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+        children: [
+          ChatBubble(
+            isSender: true,
+            text: 'halo, apakah item ini masih ada ?',
+          ),
+          ChatBubble(
+            isSender: false,
+            text: 'iya halo apkabar, item ini masih tersedia silahkan di pesan',
+          )
+        ],
       );
     }
 
@@ -131,7 +148,7 @@ class DetailChatPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 20,
                 ),
                 Image.asset(
@@ -149,7 +166,7 @@ class DetailChatPage extends StatelessWidget {
       backgroundColor: backgroundColor3,
       appBar: header(),
       bottomNavigationBar: chatInput(),
-      body: Container(),
+      body: content(),
     );
   }
 }
