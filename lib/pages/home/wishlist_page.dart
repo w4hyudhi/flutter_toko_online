@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/pages/widgets/wishlist_card.dart';
 import 'package:flutter_toko_online/theme.dart';
 
 class WishlistPage extends StatelessWidget {
@@ -69,10 +70,30 @@ class WishlistPage extends StatelessWidget {
       ));
     }
 
+    Widget content() {
+      return Expanded(
+          child: Container(
+        color: backgroundColor3,
+        child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+            children: const [
+              WishListCard(
+                title: 'Terrex Urban Low',
+                price: '\$143,98',
+              ),
+              WishListCard(
+                title: 'Predator 20.3 Firm Ground Boots',
+                price: '\$150,98',
+              ),
+            ]),
+      ));
+    }
+
     return Column(
       children: [
         header(),
-        emptyWishlist(),
+        content(),
+        // emptyWishlist(),
       ],
     );
   }
