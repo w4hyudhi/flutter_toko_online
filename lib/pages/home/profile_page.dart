@@ -96,7 +96,11 @@ class ProfilePage extends StatelessWidget {
               style:
                   primaryTextStyle.copyWith(fontSize: 16, fontWeight: semiBold),
             ),
-            menuItem('Edit Profile'),
+            GestureDetector(
+                onTap: () {
+                  Navigator.pushNamed(context, '/edit-profile');
+                },
+                child: menuItem('Edit Profile')),
             menuItem('Your Orders'),
             menuItem('Help'),
             SizedBox(
