@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/pages/cart_page.dart';
 import 'package:flutter_toko_online/pages/detail_chat_page.dart';
 import 'package:flutter_toko_online/pages/edit_profile_page.dart';
 import 'package:flutter_toko_online/pages/home/main_page.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
       '/detail-chat': (context) => DetailChatPage(),
       '/edit-profile': (context) => EditProfilePage(),
       '/product': (context) => ProductPage(),
+      '/cart': (context) => CartPage(),
     });
   }
 }
