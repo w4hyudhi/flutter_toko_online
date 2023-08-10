@@ -82,10 +82,73 @@ class CartPage extends StatelessWidget {
       );
     }
 
+    Widget customButtonNavigation() {
+      return Container(
+        height: 180,
+        child: Column(children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Subtotal',
+                  style: primaryTextStyle,
+                ),
+                Text(
+                  '\$287,96',
+                  style: priceTextStyle.copyWith(
+                      fontSize: 16, fontWeight: semiBold),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Divider(
+            thickness: 0.4,
+            color: subtitleColor,
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Container(
+            height: 50,
+            margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+            child: TextButton(
+                onPressed: () {},
+                style: TextButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12)),
+                    backgroundColor: primaryColor,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20,
+                    )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Continue to Checkout',
+                      style: primaryTextStyle.copyWith(
+                          fontSize: 16, fontWeight: semiBold),
+                    ),
+                    Icon(
+                      Icons.arrow_forward,
+                      color: primaryTextColor,
+                    )
+                  ],
+                )),
+          )
+        ]),
+      );
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor3,
       appBar: header(),
       body: content(),
+      bottomNavigationBar: customButtonNavigation(),
     );
   }
 }
