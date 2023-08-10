@@ -217,7 +217,10 @@ class CheckoutPage extends StatelessWidget {
                     backgroundColor: primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12))),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/checkout-success', (route) => false);
+                },
                 child: Text(
                   'Checkout Now',
                   style: primaryTextStyle.copyWith(
