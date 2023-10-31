@@ -1,4 +1,4 @@
-package com.example.flutter_toko_online
+package com.mwk.toko
 
 import io.flutter.embedding.android.FlutterActivity
 

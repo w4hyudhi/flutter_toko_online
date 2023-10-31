@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "810250962",
+    "project_id": "toko-online-901cc",
+    "storage_bucket": "toko-online-901cc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:810250962:android:ad8579513e541b69f7730b",
+        "android_client_info": {
+          "package_name": "com.mwk.toko"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCR80IX7Gcw2ie_shOvwPED-YZWZYoEHM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

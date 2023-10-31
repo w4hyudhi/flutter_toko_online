@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/product_model.dart';
+import 'package:flutter_toko_online/pages/product_page.dart';
 
 import '../../theme.dart';
 
 class ProductTile extends StatelessWidget {
-  const ProductTile({super.key});
+  final ProductModel product;
+  const ProductTile({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product: product),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -21,8 +29,10 @@ class ProductTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/image_shoes.png',
+              child: Image.network(
+                product.galleries!.isEmpty
+                    ? 'http://192.168.0.105:8000/storage/gallery/image_shoes.png'
+                    : product.galleries![0].url!,
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -36,7 +46,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'football',
+                    product.category!.name!,
                     style: secondaryTextStyle.copyWith(
                       fontSize: 12,
                     ),
@@ -45,7 +55,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Predator 2.0 Firm Ground',
+                    product.name!,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -56,7 +66,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    '\$65,00',
+                    '\$${product.price}',
                     style: priceTextStyle.copyWith(
                       fontWeight: medium,
                     ),

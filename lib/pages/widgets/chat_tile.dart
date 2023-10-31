@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/product_model.dart';
+import 'package:flutter_toko_online/pages/detail_chat_page.dart';
 import 'package:flutter_toko_online/theme.dart';
 
 class ChatTile extends StatelessWidget {
@@ -8,7 +10,14 @@ class ChatTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/detail-chat');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailChatPage(
+              product: uninitializedProductModel(),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(top: defaultMargin),

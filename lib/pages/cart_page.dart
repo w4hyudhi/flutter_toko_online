@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_toko_online/pages/widgets/cart_card.dart';
+import 'package:flutter_toko_online/providers/cart_provider.dart';
 import 'package:flutter_toko_online/theme.dart';
+import 'package:provider/provider.dart';
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -75,10 +79,11 @@ class CartPage extends StatelessWidget {
     Widget content() {
       return ListView(
         padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-        children: [
-          CartCard(),
-          CartCard(),
-        ],
+        children: cartProvider.carts
+            .map((cart) => CartCard(
+                  cart: cart,
+                ))
+            .toList(),
       );
     }
 
@@ -96,7 +101,7 @@ class CartPage extends StatelessWidget {
                   style: primaryTextStyle,
                 ),
                 Text(
-                  '\$287,96',
+                  '\$${cartProvider.totalPrice()}',
                   style: priceTextStyle.copyWith(
                       fontSize: 16, fontWeight: semiBold),
                 )
@@ -149,8 +154,10 @@ class CartPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: backgroundColor3,
       appBar: header(),
-      body: content(),
-      bottomNavigationBar: customButtonNavigation(),
+      body: cartProvider.carts.isEmpty ? emptyCart() : content(),
+      bottomNavigationBar: cartProvider.carts.isEmpty
+          ? const SizedBox()
+          : customButtonNavigation(),
     );
   }
 }

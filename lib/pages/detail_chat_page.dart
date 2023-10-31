@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/product_model.dart';
 import 'package:flutter_toko_online/pages/widgets/chat_bubble.dart';
+import 'package:flutter_toko_online/providers/auth_provider.dart';
+import 'package:flutter_toko_online/services/message_service.dart';
 import 'package:flutter_toko_online/theme.dart';
+import 'package:provider/provider.dart';
 
-class DetailChatPage extends StatelessWidget {
-  const DetailChatPage({super.key});
+// ignore: must_be_immutable
+class DetailChatPage extends StatefulWidget {
+  ProductModel? product;
+  DetailChatPage({super.key, this.product});
+
+  @override
+  State<DetailChatPage> createState() => _DetailChatPageState();
+}
+
+class _DetailChatPageState extends State<DetailChatPage> {
+  TextEditingController messageController = TextEditingController(text: '');
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     PreferredSizeWidget header() {
       return PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -62,8 +76,8 @@ class DetailChatPage extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                'assets/image_shoes.png',
+              child: Image.network(
+                widget.product!.galleries![0].url!,
                 width: 54,
               ),
             ),
@@ -76,7 +90,7 @@ class DetailChatPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'COURT VISION SHOES',
+                    widget.product!.name!,
                     style: primaryTextStyle,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -84,7 +98,7 @@ class DetailChatPage extends StatelessWidget {
                     height: 2,
                   ),
                   Text(
-                    '\$57,00',
+                    '\$${widget.product!.price!}',
                     style: priceTextStyle.copyWith(
                       fontWeight: medium,
                     ),
@@ -92,9 +106,16 @@ class DetailChatPage extends StatelessWidget {
                 ],
               ),
             ),
-            Image.asset(
-              'assets/button_close.png',
-              width: 22,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.product = uninitializedProductModel();
+                });
+              },
+              child: Image.asset(
+                'assets/button_close.png',
+                width: 22,
+              ),
             )
           ],
         ),
@@ -125,7 +146,9 @@ class DetailChatPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            productPreview(),
+            widget.product is uninitializedProductModel
+                ? SizedBox()
+                : productPreview(),
             Row(
               children: [
                 Expanded(
@@ -140,6 +163,7 @@ class DetailChatPage extends StatelessWidget {
                     ),
                     child: Center(
                       child: TextFormField(
+                        controller: messageController,
                         style: primaryTextStyle,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Type Message...',
@@ -152,9 +176,22 @@ class DetailChatPage extends StatelessWidget {
                 const SizedBox(
                   width: 20,
                 ),
-                Image.asset(
-                  'assets/button_send.png',
-                  width: 45,
+                GestureDetector(
+                  onTap: () {
+                    MessageService().addMessage(
+                        user: authProvider.user,
+                        isFromUser: true,
+                        product: widget.product,
+                        message: messageController.text);
+                    setState(() {
+                      widget.product = uninitializedProductModel();
+                      messageController.text = '';
+                    });
+                  },
+                  child: Image.asset(
+                    'assets/button_send.png',
+                    width: 45,
+                  ),
                 )
               ],
             ),

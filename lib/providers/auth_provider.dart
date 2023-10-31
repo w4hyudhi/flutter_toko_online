@@ -3,7 +3,10 @@ import 'package:flutter_toko_online/models/user_model.dart';
 import 'package:flutter_toko_online/services/auth_service.dart';
 
 class AuthProvider with ChangeNotifier {
-  UserModel? _user;
+  late UserModel _user;
+
+  UserModel get user => _user;
+
   set user(UserModel user) {
     _user = user;
     notifyListeners();

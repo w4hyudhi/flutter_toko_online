@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/cart_model.dart';
+import 'package:flutter_toko_online/providers/cart_provider.dart';
 import 'package:flutter_toko_online/theme.dart';
+import 'package:provider/provider.dart';
 
 class CartCard extends StatelessWidget {
-  const CartCard({super.key});
+  final CartModel cart;
+  const CartCard({super.key, required this.cart});
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
     return Container(
       margin: EdgeInsets.only(top: 30),
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -22,7 +27,7 @@ class CartCard extends StatelessWidget {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     image: DecorationImage(
-                        image: AssetImage('assets/image_shoes.png'))),
+                        image: NetworkImage(cart.product!.galleries![0].url!))),
               ),
               SizedBox(
                 width: 12,
@@ -32,7 +37,7 @@ class CartCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Terrex Urban Low',
+                      cart.product!.name!,
                       style: primaryTextStyle.copyWith(
                         fontWeight: semiBold,
                         fontSize: 16,
@@ -42,7 +47,7 @@ class CartCard extends StatelessWidget {
                       height: 2,
                     ),
                     Text(
-                      '\$143,98',
+                      '\$${cart.product!.price}',
                       style: priceTextStyle,
                     )
                   ],
@@ -50,29 +55,39 @@ class CartCard extends StatelessWidget {
               ),
               Column(
                 children: [
-                  Container(
-                    height: 16,
-                    width: 16,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/button_add.png'))),
+                  GestureDetector(
+                    onTap: () {
+                      cartProvider.addQuantity(cart.id!);
+                    },
+                    child: Container(
+                      height: 16,
+                      width: 16,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/button_add.png'))),
+                    ),
                   ),
                   SizedBox(
                     height: 2,
                   ),
                   Text(
-                    '2',
+                    cart.quantity.toString(),
                     style: primaryTextStyle,
                   ),
                   SizedBox(
                     height: 2,
                   ),
-                  Container(
-                    height: 16,
-                    width: 16,
-                    decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/button_min.png'))),
+                  GestureDetector(
+                    onTap: () {
+                      cartProvider.reduceQuantity(cart.id!);
+                    },
+                    child: Container(
+                      height: 16,
+                      width: 16,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/button_min.png'))),
+                    ),
                   ),
                 ],
               )
@@ -81,23 +96,28 @@ class CartCard extends StatelessWidget {
           SizedBox(
             height: 12,
           ),
-          Row(
-            children: [
-              Image.asset(
-                'assets/icon_remove.png',
-                width: 10,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Text(
-                'Remove',
-                style: alertTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: light,
+          GestureDetector(
+               onTap: () {
+                      cartProvider.removeCart(cart.id!);
+                    },
+            child: Row(
+              children: [
+                Image.asset(
+                  'assets/icon_remove.png',
+                  width: 10,
                 ),
-              )
-            ],
+                SizedBox(
+                  width: 4,
+                ),
+                Text(
+                  'Remove',
+                  style: alertTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: light,
+                  ),
+                )
+              ],
+            ),
           )
         ],
       ),

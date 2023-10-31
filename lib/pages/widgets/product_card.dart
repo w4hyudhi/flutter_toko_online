@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/product_model.dart';
+import 'package:flutter_toko_online/pages/product_page.dart';
 import 'package:flutter_toko_online/theme.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final ProductModel product;
+  const ProductCard({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ProductPage(product: product)),
+        );
       },
       child: Container(
         width: 215,
@@ -22,8 +29,10 @@ class ProductCard extends StatelessWidget {
             SizedBox(
               height: 30,
             ),
-            Image.asset(
-              'assets/image_shoes.png',
+            Image.network(
+              product.galleries!.isEmpty
+                  ? 'http://192.168.0.105:8000/storage/gallery/image_shoes.png'
+                  : product.galleries![0].url!,
               width: 215,
               height: 150,
               fit: BoxFit.cover,
@@ -34,23 +43,24 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hiking',
+                    product.category!.name!,
                     style: secondaryTextStyle.copyWith(fontSize: 12),
                   ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    'COURT VISON 2.0',
+                    product.name!,
                     style: blackTextStyle.copyWith(
                         fontSize: 18, fontWeight: semiBold),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    '\$50,00',
+                    '\$${product.price}',
                     style: priceTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),

@@ -1,37 +1,119 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/product_model.dart';
+import 'package:flutter_toko_online/pages/detail_chat_page.dart';
+import 'package:flutter_toko_online/providers/cart_provider.dart';
+import 'package:flutter_toko_online/providers/wishlist_provider.dart';
 import 'package:flutter_toko_online/theme.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
-  const ProductPage({super.key});
+  final ProductModel product;
+
+  const ProductPage({super.key, required this.product});
 
   @override
   State<ProductPage> createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
-  final List images = [
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png'
-  ];
-
   final List familiarShoes = [
     'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
-    'assets/image_shoes.png',
+    'assets/image_shoes2.png',
+    'assets/image_shoes3.png',
+    'assets/image_shoes4.png',
+    'assets/image_shoes5.png',
+    'assets/image_shoes6.png',
+    'assets/image_shoes7.png',
+    'assets/image_shoes8.png',
   ];
 
   int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    WishlistProvider wishlistProvider = Provider.of<WishlistProvider>(context);
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
+    Future<void> showSuccessDialog() async {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => Container(
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/icon_success.png',
+                    width: 100,
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'Hurray :)',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'Item added successfully',
+                    style: secondaryTextStyle,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Container(
+                    width: 154,
+                    height: 44,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/cart');
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'View My Cart',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 16,
+                          fontWeight: medium,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
     Widget indicator(int index) {
       return Container(
         width: currentIndex == index ? 16 : 4,
@@ -75,9 +157,9 @@ class _ProductPageState extends State<ProductPage> {
             ),
           ),
           CarouselSlider(
-              items: images
-                  .map((image) => Image.asset(
-                        image,
+              items: widget.product.galleries!
+                  .map((image) => Image.network(
+                        image.url!,
                         width: MediaQuery.of(context).size.width,
                         height: 310,
                         fit: BoxFit.cover,
@@ -96,7 +178,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: images.map((e) {
+            children: widget.product.galleries!.map((e) {
               index++;
               return indicator(index);
             }).toList(),
@@ -108,6 +190,7 @@ class _ProductPageState extends State<ProductPage> {
     Widget content() {
       int index = -1;
       return Container(
+        width: double.infinity,
         margin: EdgeInsets.only(top: 17),
         decoration: BoxDecoration(
           color: backgroundColor1,
@@ -127,20 +210,42 @@ class _ProductPageState extends State<ProductPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'TERREX URBAN LOW',
+                        widget.product.name!,
                         style: primaryTextStyle.copyWith(
                             fontSize: 18, fontWeight: semiBold),
                       ),
                       Text(
-                        'hicking',
+                        widget.product.category!.name!,
                         style: secondaryTextStyle.copyWith(fontSize: 12),
                       ),
                     ],
                   ),
                 ),
-                Image.asset(
-                  'assets/button_wishlist.png',
-                  width: 46,
+                GestureDetector(
+                  onTap: () {
+                    wishlistProvider.setProduct(widget.product);
+                    if (wishlistProvider.isWishlist(widget.product)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: secondaryColor,
+                          content: const Text(
+                            'has been added to the wishlist',
+                            textAlign: TextAlign.center,
+                          )));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: alertColor,
+                          content: const Text(
+                            'has been removed from the wishlist',
+                            textAlign: TextAlign.center,
+                          )));
+                    }
+                  },
+                  child: Image.asset(
+                    wishlistProvider.isWishlist(widget.product)
+                        ? 'assets/button_wishlist_blue.png'
+                        : 'assets/button_wishlist.png',
+                    width: 46,
+                  ),
                 )
               ]),
             ),
@@ -160,7 +265,7 @@ class _ProductPageState extends State<ProductPage> {
                       style: primaryTextStyle,
                     ),
                     Text(
-                      '\$143,98',
+                      '\$${widget.product.price!}',
                       style: priceTextStyle.copyWith(
                           fontSize: 16, fontWeight: semiBold),
                     )
@@ -184,7 +289,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Unpaved trails and mixed surfaces are easy when you have the traction and support you need. Casual enough for the daily commute.',
+                    widget.product.description!,
                     style: subtitleTextStyle.copyWith(fontWeight: light),
                     textAlign: TextAlign.justify,
                   ),
@@ -219,18 +324,31 @@ class _ProductPageState extends State<ProductPage> {
                     )
                   ]),
             ),
+
             // NOTE: Button
 
             Container(
               margin: EdgeInsets.all(defaultMargin),
               child: Row(
                 children: [
-                  Container(
-                    height: 54,
-                    width: 54,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/button_chat.png'))),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailChatPage(
+                            product: widget.product,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 54,
+                      width: 54,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/button_chat.png'))),
+                    ),
                   ),
                   SizedBox(
                     width: 16,
@@ -248,7 +366,10 @@ class _ProductPageState extends State<ProductPage> {
                           style: primaryTextStyle.copyWith(
                               fontSize: 16, fontWeight: semiBold),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          cartProvider.addCart(widget.product);
+                          showSuccessDialog();
+                        },
                       ),
                     ),
                   )

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_toko_online/models/cart_model.dart';
 
 import '../../theme.dart';
 
-class CheckoutCard extends StatefulWidget {
-  const CheckoutCard({super.key});
+class CheckoutCard extends StatelessWidget {
+  final CartModel cart;
+  const CheckoutCard({super.key, required this.cart});
 
-  @override
-  State<CheckoutCard> createState() => _CheckoutCardState();
-}
-
-class _CheckoutCardState extends State<CheckoutCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +25,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(12)),
                     image: DecorationImage(
-                        image: AssetImage('assets/image_shoes.png'))),
+                        image: NetworkImage(cart.product!.galleries![0].url!))),
               ),
               SizedBox(
                 width: 12,
@@ -38,7 +35,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Terrex Urban Low Terrex Urban Low Terrex Urban Low',
+                      cart.product!.name!,
                       style: primaryTextStyle.copyWith(
                         fontWeight: semiBold,
                         fontSize: 16,
@@ -49,7 +46,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                       height: 2,
                     ),
                     Text(
-                      '\$143,98',
+                      '\$${cart.product!.price!}',
                       style: priceTextStyle,
                     )
                   ],
@@ -59,7 +56,7 @@ class _CheckoutCardState extends State<CheckoutCard> {
                 width: 12,
               ),
               Text(
-                '2 Items',
+                '${cart.quantity} Items',
                 style: secondaryTextStyle.copyWith(
                   fontSize: 12,
                 ),

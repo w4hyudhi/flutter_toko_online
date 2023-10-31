@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_toko_online/models/user_model.dart';
 
 class AuthService {
-  String baseUrl = 'http://192.168.0.107:8000/api';
+  String baseUrl = 'http://192.168.100.77:8000/api';
 
   Future<UserModel> regsiter(
       {String? name, String? username, String? email, String? password}) async {
@@ -49,9 +49,7 @@ class AuthService {
       headers: headers,
       body: body,
     );
-    if (kDebugMode) {
-      print('response : ${response.body}');
-    }
+
     if (response.statusCode == 200) {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);

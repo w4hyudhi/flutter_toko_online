@@ -7,13 +7,22 @@ import 'package:flutter_toko_online/pages/edit_profile_page.dart';
 import 'package:flutter_toko_online/pages/home/main_page.dart';
 import 'package:flutter_toko_online/pages/product_page.dart';
 import 'package:flutter_toko_online/providers/auth_provider.dart';
+import 'package:flutter_toko_online/providers/cart_provider.dart';
+import 'package:flutter_toko_online/providers/product_provider.dart';
+import 'package:flutter_toko_online/providers/transaction_provider.dart';
+import 'package:flutter_toko_online/providers/wishlist_provider.dart';
 import 'package:provider/provider.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'pages/sign_in_page.dart';
 import 'pages/sign_up_page.dart';
 import 'pages/splash_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(MyApp());
 }
 
@@ -24,15 +33,17 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => ProductProvider()),
+        ChangeNotifierProvider(create: (context) => WishlistProvider()),
+        ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => TransactionProvider()),
       ],
       child: MaterialApp(debugShowCheckedModeBanner: false, routes: {
         '/': (context) => SplashPage(),
         '/sign-in': (context) => SignInPage(),
         '/sign-up': (context) => SignUpPage(),
         '/home': (context) => MainPage(),
-        '/detail-chat': (context) => DetailChatPage(),
         '/edit-profile': (context) => EditProfilePage(),
-        '/product': (context) => ProductPage(),
         '/cart': (context) => CartPage(),
         '/checkout': (context) => CheckoutPage(),
         '/checkout-success': (context) => CheckoutSuccessPage(),
